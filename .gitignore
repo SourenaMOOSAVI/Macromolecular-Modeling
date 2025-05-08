@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+DOenv/
+
+# Output files
+data/3IDP_modeled_*.cif
+data/3IDP_metadata.txt
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
