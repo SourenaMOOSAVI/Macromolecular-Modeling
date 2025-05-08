@@ -6,7 +6,8 @@ __pycache__/
 
 # Virtual environment
 venv/
-DOenv/
+Myenv/
+myenv/
 
 # Output files
 data/3IDP_modeled_*.cif
