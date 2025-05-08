@@ -106,7 +106,7 @@ def save_structure(structure, output_file):
 
 def main():
     pdb_id = "3IDP"
-    cif_file = "3IDP.cif"
+    cif_file = "../data/3IDP.cif"
     num_conformations = 5
     
     try:
