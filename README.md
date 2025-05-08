@@ -48,7 +48,7 @@ For `3IDP` included in the `data` directory of the current repository, it models
 
 4. **Obtain Input File**:
    - `3IDP.cif` is placed in the `data/` directory.
-   - Alternatively, download it from [RCSB PDB](https://files.rcsb.org/download/3IDP.cif).
+   - Alternatively, download it from [RCSB PDB](https://www.rcsb.org/structure/3IDP).
 
 ## Usage
 
