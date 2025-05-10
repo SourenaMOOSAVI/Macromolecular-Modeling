@@ -31,6 +31,7 @@ For 3IDP, it models three loops:
    ```bash
    git clone git@github.com:SourenaMOOSAVI/Macromolecular-Modeling.git
    cd Macromolecular-Modeling
+   git checkout enhancement
    ```
 
 2. **Create a Virtual Environment**:
