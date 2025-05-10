@@ -1,6 +1,9 @@
 import argparse
 import numpy as np
-from Bio.PDB import Structure, Model, Chain
+import os
+from Bio.PDB.Structure import Structure
+from Bio.PDB.Model import Model
+from Bio.PDB.Chain import Chain
 from loop_finder import parse_structure, find_missing_loops
 from loop_modeler import generate_loop_coordinates, create_loop_residues, get_residue_types
 from scorer import score_conformation
@@ -29,6 +32,8 @@ def main():
         output_structures = []
         metadata = []
         structures_generated = 0
+        output_dir = "../data"
+        os.makedirs(output_dir, exist_ok=True)  # Create output directory if it doesn't exist
 
         for region in missing_loops:
             if structures_generated >= args.max_structures:
@@ -91,11 +96,12 @@ def main():
                 structures_generated += 1
 
         for i, (struct, score) in enumerate(output_structures):
-            output_file = f"data/{args.pdb_id}_modeled_{i}.cif"
+            output_file = os.path.join(output_dir, f"{args.pdb_id}_modeled_{i}.cif")
             save_structure(struct, output_file)
             print(f"Saved structure {output_file} with score {score:.2f}")
 
-        save_metadata(metadata, f"data/{args.pdb_id}_metadata.txt")
+        metadata_file = os.path.join(output_dir, f"{args.pdb_id}_metadata.txt")
+        save_metadata(metadata, metadata_file)
 
     except Exception as e:
         print(f"Error: {e}")

@@ -1,4 +1,4 @@
-from Bio.PDB import MMCIFIO
+from Bio.PDB.mmcifio import MMCIFIO
 
 def save_structure(structure, output_file):
     """Save structure to PDBx/mmCIF file."""

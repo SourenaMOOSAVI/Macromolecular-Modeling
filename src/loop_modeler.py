@@ -1,5 +1,6 @@
 import numpy as np
-from Bio.PDB import Residue, Atom
+from Bio.PDB.Residue import Residue
+from Bio.PDB.Atom import Atom
 from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
 def get_residue_types(cif_file, chain_id, start_num, gap_size):
@@ -20,30 +21,29 @@ def get_residue_types(cif_file, chain_id, start_num, gap_size):
     return residue_types
 
 def generate_loop_coordinates(start_coord, end_coord, gap_size, num_conformations=5):
-    """Generate loop coordinates using simplified Ramachandran angles."""
+    """Generate loop coordinates with biased Ramachandran angles."""
     rng = np.random.default_rng()
     conformations = []
-    # Simplified Ramachandran angles (phi, psi) for alpha-helix-like loops
-    ramachandran_angles = [(-60, -40)] * gap_size  # Placeholder; can use a library
+    # Bias toward helical angles, with some sheet/coil
+    angle_options = [(-60, -40)] * 3 + [(-140, 135), (-70, -30)]  # 60% helix, 20% sheet, 20% coil
     ca_distance = 3.8  # Approximate C-alpha distance
 
     for _ in range(num_conformations):
         coords = []
         current_coord = start_coord
+        ramachandran_angles = rng.choice(angle_options, size=gap_size)
         for i in range(gap_size):
-            # Simulate peptide bond geometry (simplified)
             phi, psi = ramachandran_angles[i]
-            # Approximate next C-alpha position
             displacement = np.array([ca_distance * np.cos(np.radians(phi)),
                                    ca_distance * np.sin(np.radians(phi)),
                                    0.0])
-            perturbation = rng.normal(0, 0.5, 3)
+            perturbation = rng.normal(0, 0.75, 3)  # Reduced perturbation
             next_coord = current_coord + displacement + perturbation
             coords.append(next_coord)
             current_coord = next_coord
-        # Adjust final coordinate to approach end_coord
+        # Adjust final coordinate to closely match end_coord
         if coords:
-            coords[-1] = 0.5 * (coords[-1] + end_coord)  # Smooth connection
+            coords[-1] = 0.8 * coords[-1] + 0.2 * end_coord  # Weighted toward end_coord
         conformations.append(coords)
     print(f"Generated {len(coords)} coordinates for gap_size {gap_size}")
     return conformations
@@ -59,7 +59,6 @@ def create_loop_residues(chain, start_num, gap_size, loop_coords, residue_types)
         res_name = residue_types[i]
         residue = Residue(res_id, res_name, ' ')
         ca_coord = loop_coords[i]
-        # Add backbone atoms with simplified geometry
         n_coord = ca_coord + np.array([1.45, 0, 0])  # N-Ca bond ~1.45 Å
         c_coord = ca_coord + np.array([-1.33, 0, 0])  # Ca-C bond ~1.53 Å
         o_coord = c_coord + np.array([0, 1.24, 0])   # C=O bond ~1.24 Å
