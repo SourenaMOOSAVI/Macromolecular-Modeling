@@ -86,7 +86,7 @@ The script will:
   ...
   ```
 
-## Improvements in Version 2
+## Improvements in enhancement branch
 
 - **Modular Structure**: Split into `loop_finder`, `loop_modeler`, `scorer`, `io_utils`, and `main`.
 - **Physical Plausibility**:
